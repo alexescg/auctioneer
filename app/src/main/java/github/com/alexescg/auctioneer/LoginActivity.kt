@@ -3,13 +3,10 @@ package github.com.alexescg.auctioneer
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.pm.PackageManager
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
+import android.content.*
 
-import android.content.CursorLoader
-import android.content.Loader
 import android.database.Cursor
 import android.net.Uri
 import android.os.AsyncTask
@@ -18,9 +15,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.TextUtils
-import android.view.KeyEvent
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -30,9 +25,15 @@ import android.widget.TextView
 
 import java.util.ArrayList
 
-import android.Manifest.permission.READ_CONTACTS
-import android.app.Activity
-import android.content.Intent
+import android.util.Log
+import github.com.alexescg.auctioneer.api.auth.AuthService
+import github.com.alexescg.auctioneer.api.RestClient
+import github.com.alexescg.auctioneer.api.auth.JwtAuthenticator
+import github.com.alexescg.auctioneer.model.AuthRequest
+import github.com.alexescg.auctioneer.model.JsonWebToken
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * A login screen that offers login via email/password.
@@ -54,7 +55,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         setContentView(R.layout.activity_login)
         // Set up the login form.
         mEmailView = findViewById(R.id.email) as AutoCompleteTextView
-        populateAutoComplete()
 
         mPasswordView = findViewById(R.id.password) as EditText
         mPasswordView!!.setOnEditorActionListener(TextView.OnEditorActionListener { textView, id, keyEvent ->
@@ -71,43 +71,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         mLoginFormView = findViewById(R.id.login_form)
         mProgressView = findViewById(R.id.login_progress)
     }
-
-    private fun populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return
-        }
-
-        loaderManager.initLoader(0, null, this)
-    }
-
-    private fun mayRequestContacts(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView!!, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok) { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) }
-        } else {
-            requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
-        }
-        return false
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete()
-            }
-        }
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -157,8 +120,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(true)
             mAuthTask = UserLoginTask(email, password)
             mAuthTask!!.execute(null as Void?)
-            val mainIntent: Intent = Intent(baseContext, MainActivity::class.java)
-            startActivity(mainIntent)
         }
     }
 
@@ -260,24 +221,27 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000)
-            } catch (e: InterruptedException) {
-                return false
-            }
-
-            for (credential in DUMMY_CREDENTIALS) {
-                val pieces = credential.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (pieces[0] == mEmail) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1] == mPassword
+            val authRequest: AuthRequest = AuthRequest(mEmail, mPassword)
+            val authService: AuthService = RestClient.createService(AuthService::class.java)
+            val call: Call<JsonWebToken> = authService.auth(authRequest)
+            call.enqueue(object : Callback<JsonWebToken> {
+                override fun onResponse(call: Call<JsonWebToken>?, response: Response<JsonWebToken>?) {
+                    if (response!!.isSuccessful) {
+                        val token: String = response.body()!!.accessToken
+                        RestClient.addAuthCredentials(JwtAuthenticator(token))
+                        val mainIntent: Intent = Intent(baseContext, MainActivity::class.java)
+                        startActivity(mainIntent)
+                    } else {
+                        Log.d("error /authentication", response.errorBody().toString())
+                    }
                 }
-            }
 
-            // TODO: register the new account here.
+                override fun onFailure(call: Call<JsonWebToken>?, t: Throwable?) {
+                    Log.d("failure /authentication", t.toString())
+                }
+
+            })
+
             return true
         }
 
@@ -297,20 +261,6 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             mAuthTask = null
             showProgress(false)
         }
-    }
-
-    companion object {
-
-        /**
-         * Id to identity READ_CONTACTS permission request.
-         */
-        private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }
 
