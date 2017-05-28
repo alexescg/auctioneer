@@ -1,4 +1,4 @@
-package github.com.alexescg.auctioneer
+package github.com.alexescg.auctioneer.view
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -26,6 +26,7 @@ import android.widget.TextView
 import java.util.ArrayList
 
 import android.util.Log
+import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.api.auth.AuthService
 import github.com.alexescg.auctioneer.api.RestClient
 import github.com.alexescg.auctioneer.api.auth.JwtAuthenticator

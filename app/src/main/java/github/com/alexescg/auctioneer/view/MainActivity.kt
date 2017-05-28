@@ -1,4 +1,4 @@
-package github.com.alexescg.auctioneer
+package github.com.alexescg.auctioneer.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
+import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.api.ApiResponse
 import github.com.alexescg.auctioneer.api.RestClient
 import github.com.alexescg.auctioneer.api.auth.JwtAuthenticator
