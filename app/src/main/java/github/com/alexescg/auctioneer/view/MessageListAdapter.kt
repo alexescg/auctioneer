@@ -2,12 +2,14 @@ package github.com.alexescg.auctioneer.view
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.model.Message
+import github.com.alexescg.auctioneer.util.DateUtil
 
 /**
  *
@@ -15,10 +17,7 @@ import github.com.alexescg.auctioneer.model.Message
  * @author alex
  * @since 5/27/17.
  */
-class MessageListAdapter(
-        val context: Context,
-        val messageList: List<Message>)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageListAdapter(val messageList: List<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private val VIEW_TYPE_MESSAGE_SENT: Int = 1
@@ -26,7 +25,7 @@ class MessageListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val message: Message = messageList.get(position)
+        val message: Message = messageList[position]
         if (message.user.id.equals("mi id")) {
             return VIEW_TYPE_MESSAGE_SENT
         } else {
@@ -39,31 +38,35 @@ class MessageListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-        var view: View? = null
+        val view: View
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater
                     .from(parent!!.context)
-                    .inflate(R.layout.item_message_else, parent, false)
+                    .inflate(R.layout.item_message_sent, parent, false)
             return SentMessageHolder(view)
         } else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
             view = LayoutInflater
                     .from(parent!!.context)
                     .inflate(R.layout.item_message_else, parent, false)
             return ReceivedMessageHolder(view)
-        } else {
-            return null!!
         }
+        return null!!
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        val message: Message = messageList.get(position)
+        val message: Message = messageList[position]
         when (holder!!.itemViewType) {
-            VIEW_TYPE_MESSAGE_SENT -> (holder as SentMessageHolder).bind(message)
-            VIEW_TYPE_MESSAGE_RECEIVED -> (holder as ReceivedMessageHolder).bind(message)
+            VIEW_TYPE_MESSAGE_SENT ->
+                (holder as SentMessageHolder).bind(message)
+
+            VIEW_TYPE_MESSAGE_RECEIVED ->
+                (holder as ReceivedMessageHolder).bind(message)
+            else ->
+                Log.d("error", "fallo asignando tipo de vista")
         }
     }
 
-    private class ReceivedMessageHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    private class ReceivedMessageHolder(view: View) : RecyclerView.ViewHolder(view) {
         var messageText: TextView? = null
         var timestampText: TextView? = null
 
@@ -74,11 +77,11 @@ class MessageListAdapter(
 
         fun bind(message: Message) {
             messageText!!.text = message.text
-            timestampText!!.text = message.createdAt.toString()
+            timestampText!!.text = DateUtil.formatDateToTime(message.createdAt!!)
         }
     }
 
-    private class SentMessageHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    private class SentMessageHolder(view: View) : RecyclerView.ViewHolder(view) {
         var messageText: TextView? = null
         var timestampText: TextView? = null
 
@@ -89,7 +92,7 @@ class MessageListAdapter(
 
         fun bind(message: Message) {
             messageText!!.text = message.text
-            timestampText!!.text = message.createdAt.toString()
+            timestampText!!.text = DateUtil.formatDateToTime(message.createdAt!!)
         }
     }
 

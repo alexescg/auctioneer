@@ -17,7 +17,7 @@ import okhttp3.OkHttpClient
  */
 class RestClient {
     companion object {
-        private val baseUrl: String = "http://192.168.1.229:3030"
+        private val baseUrl: String = "http://192.168.100.56:3030"
         private var retrofit: Retrofit
         fun <T> createService(serviceClass: Class<T>): T {
             return retrofit.create(serviceClass);

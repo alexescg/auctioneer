@@ -26,7 +26,9 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_home -> {
                 mTextMessage!!.setText(R.string.title_home)
-                return@OnNavigationItemSelectedListener true
+                val messagesIntent: Intent = Intent(baseContext, MessageListActivity::class.java)
+                startActivity(messagesIntent)
+//                return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
                 mTextMessage!!.setText(R.string.title_dashboard)
@@ -47,28 +49,6 @@ class MainActivity : AppCompatActivity() {
         mTextMessage = findViewById(R.id.message) as TextView
         val navigation = findViewById(R.id.navigation) as BottomNavigationView
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-        val messageService: MessageService = RestClient.createService(MessageService::class.java)
-        val call: Call<ApiResponse<List<Message>>> = messageService.getMessages()
-        call.enqueue(object : Callback<ApiResponse<List<Message>>> {
-            override fun onResponse(call: Call<ApiResponse<List<Message>>>?, response: Response<ApiResponse<List<Message>>>?) {
-                if (response!!.isSuccessful) {
-                    for (message: Message in response.body()!!.data) {
-                        Log.d("message", message.toString())
-                    }
-                } else {
-                    Log.d("error /authentication", response.errorBody().toString())
-                }
-            }
-
-            override fun onFailure(call: Call<ApiResponse<List<Message>>>?, t: Throwable?) {
-                Log.e("error", t.toString())
-
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-        })
-
-
     }
 
 }
