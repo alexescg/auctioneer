@@ -40,7 +40,6 @@ class RestClient {
 
         init {
             val kotlinMapper = ObjectMapper().registerModule(KotlinModule())
-
             retrofit = Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(
