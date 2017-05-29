@@ -37,7 +37,6 @@ class MessageListActivity : AppCompatActivity() {
                                     response: Response<ApiResponse<List<Message>>>?) {
                 if (response!!.isSuccessful) {
                     recyclerview_message_list.adapter = MessageListAdapter(response.body()!!.data)
-                    Log.d("mensajes", "" + response.body()!!.data.size)
                     recyclerview_message_list.adapter.notifyDataSetChanged()
 
                 }
