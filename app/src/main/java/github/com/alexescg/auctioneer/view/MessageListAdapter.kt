@@ -1,6 +1,7 @@
 package github.com.alexescg.auctioneer.view
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,16 +18,22 @@ import github.com.alexescg.auctioneer.util.DateUtil
  * @author alex
  * @since 5/27/17.
  */
-class MessageListAdapter(val messageList: List<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageListAdapter(val messageList: List<Message>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private val VIEW_TYPE_MESSAGE_SENT: Int = 1
         private val VIEW_TYPE_MESSAGE_RECEIVED: Int = 2
     }
 
+    private var userId: String? = null
+
+    init {
+        userId = this.context.getSharedPreferences("Preferences", 0).getString("user", "")
+    }
+
     override fun getItemViewType(position: Int): Int {
         val message: Message = messageList[position]
-        if (message.user.id.equals("mi id")) {
+        if (message.user.id.equals(userId)) {
             return VIEW_TYPE_MESSAGE_SENT
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED

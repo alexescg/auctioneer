@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import github.com.alexescg.auctioneer.R
+import github.com.alexescg.auctioneer.model.User
 import github.com.alexescg.auctioneer.view.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -45,8 +46,8 @@ class MainActivity : AppCompatActivity(), ChatsFragment.OnFragmentInteractionLis
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
-        //dejar vacio
+    override fun onListFragmentInteraction(item: User) {
+
     }
 
     override fun onFragmentInteraction(uri: Uri?) {

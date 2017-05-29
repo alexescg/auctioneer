@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MessageListActivity : AppCompatActivity() {
+class MessageListActivity() : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class MessageListActivity : AppCompatActivity() {
 
     private fun initViews() {
         recyclerview_message_list.layoutManager = LinearLayoutManager(this)
-        recyclerview_message_list.adapter = MessageListAdapter(emptyList<Message>())
+        recyclerview_message_list.adapter = MessageListAdapter(emptyList<Message>(), this)
     }
 
     private fun loadMessages() {
@@ -36,9 +36,8 @@ class MessageListActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ApiResponse<List<Message>>>?,
                                     response: Response<ApiResponse<List<Message>>>?) {
                 if (response!!.isSuccessful) {
-                    recyclerview_message_list.adapter = MessageListAdapter(response.body()!!.data)
+                    recyclerview_message_list.adapter = MessageListAdapter(response.body()!!.data, this@MessageListActivity)
                     recyclerview_message_list.adapter.notifyDataSetChanged()
-
                 }
             }
 

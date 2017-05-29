@@ -7,6 +7,7 @@ import okhttp3.Authenticator
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import okhttp3.OkHttpClient
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 
 /**
@@ -17,7 +18,7 @@ import okhttp3.OkHttpClient
  */
 class RestClient {
     companion object {
-        private val baseUrl: String = "http://192.168.100.20:3030"
+        private val baseUrl: String = "http://192.168.1.229:3030"
         private var retrofit: Retrofit
         fun <T> createService(serviceClass: Class<T>): T {
             return retrofit.create(serviceClass);
@@ -35,6 +36,9 @@ class RestClient {
                     .client(client)
                     .addConverterFactory(
                             JacksonConverterFactory.create(kotlinMapper))
+                    .addCallAdapterFactory(
+                            RxJava2CallAdapterFactory.create()
+                    )
                     .build()
         }
 

@@ -279,6 +279,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     private fun checkIfLoggedIn() {
         val preferences: SharedPreferences = applicationContext.getSharedPreferences("Preferences", 0)
         if (preferences.contains("jwt") && preferences.contains("user")) {
+            Log.d("jwt", preferences.getString("jwt", ""))
             RestClient.addAuthCredentials(JwtAuthenticator(preferences.getString("jwt", "")))
             val mainIntent: Intent = Intent(baseContext, MainActivity::class.java)
             startActivity(mainIntent)
