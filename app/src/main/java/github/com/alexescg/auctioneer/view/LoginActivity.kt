@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     private var mLoginFormView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        checkIfLoggedIn()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         // Set up the login form.
@@ -230,6 +231,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                     if (response!!.isSuccessful) {
                         val token: String = response.body()!!.accessToken
                         RestClient.addAuthCredentials(JwtAuthenticator(token))
+                        saveSession(response.body()!!)
+
+
                         val mainIntent: Intent = Intent(baseContext, MainActivity::class.java)
                         startActivity(mainIntent)
                     } else {
@@ -261,6 +265,23 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         override fun onCancelled() {
             mAuthTask = null
             showProgress(false)
+        }
+    }
+
+    private fun saveSession(body: JsonWebToken) {
+        val preferences: SharedPreferences = applicationContext.getSharedPreferences("Preferences", 0)
+        val editor: SharedPreferences.Editor = preferences.edit()
+        editor.putString("jwt", body.accessToken)
+        editor.putString("user", body.user.id)
+        editor.apply()
+    }
+
+    private fun checkIfLoggedIn() {
+        val preferences: SharedPreferences = applicationContext.getSharedPreferences("Preferences", 0)
+        if (preferences.contains("jwt") && preferences.contains("user")) {
+            RestClient.addAuthCredentials(JwtAuthenticator(preferences.getString("jwt", "")))
+            val mainIntent: Intent = Intent(baseContext, MainActivity::class.java)
+            startActivity(mainIntent)
         }
     }
 }
