@@ -53,6 +53,7 @@ class ContactListAdapter(val contactList: List<User>) : RecyclerView.Adapter<Rec
             Picasso.with(view.context).load(user.avatar).fit().into(userImage)
             this.itemView.setOnClickListener {
                 //TODO:launch messages window and open web socket
+
                 Toast.makeText(view.context, "CLICK $user ", Toast.LENGTH_SHORT).show();
             }
         }

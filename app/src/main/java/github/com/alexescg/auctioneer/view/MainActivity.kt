@@ -11,21 +11,20 @@ import android.widget.TextView
 import android.widget.Toast
 import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.model.User
-import github.com.alexescg.auctioneer.view.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity(), ChatsFragment.OnFragmentInteractionListener, ContactFragment.OnListFragmentInteractionListener {
 
     private var fragment: Fragment? = null
+    private var contactFragment: ContactFragment? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_contacts -> {
-                fragment = ContactFragment()
-//                val messagesIntent: Intent = Intent(baseContext, MessageListActivity::class.java)
-//                startActivity(messagesIntent)
-//                return@OnNavigationItemSelectedListener true
+                if (contactFragment == null) {
+                    contactFragment = ContactFragment()
+                }
+                fragment = contactFragment
             }
 
             R.id.navigation_chats -> {
