@@ -16,10 +16,15 @@ import github.com.alexescg.auctioneer.api.ApiResponse
 import github.com.alexescg.auctioneer.api.RestClient
 import github.com.alexescg.auctioneer.api.user.UserService
 import github.com.alexescg.auctioneer.model.User
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_contact_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.Toast
+import android.support.annotation.NonNull
+import kotlin.coroutines.experimental.EmptyCoroutineContext.plus
+
 
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,11 +58,12 @@ class ContactFragment : Fragment() {
                 if (response!!.isSuccessful) {
                     val me: String = activity.getSharedPreferences("Preferences", 0).getString("user", "")
 
-                    val contacts: List<User> = response.body()!!.data.filter {
-                        it.id != me
-                    }.sortedBy(User::name)
-                    list.adapter = ContactListAdapter(contacts)
-                    list.adapter.notifyDataSetChanged()
+                    val contacts: List<User> = response.body()!!.data
+                            .filter { it.id != me }.sortedBy(User::name)
+
+                    list.adapter = createReactiveContactAdapter(contacts)
+                    list.setItemViewCacheSize(10)
+                    list.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
                 }
             }
 
@@ -65,6 +71,11 @@ class ContactFragment : Fragment() {
                 Log.d("usuarios", t!!.message)
             }
         })
+    }
+
+    private fun createReactiveContactAdapter(contacts: List<User>): ContactListAdapter {
+        val populatedListAdapter: ContactListAdapter = ContactListAdapter(contacts)
+        return populatedListAdapter
     }
 
 
@@ -82,15 +93,6 @@ class ContactFragment : Fragment() {
         mListener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
     interface OnListFragmentInteractionListener {
         fun onListFragmentInteraction(item: User)
     }

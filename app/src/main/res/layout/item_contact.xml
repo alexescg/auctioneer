@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="60dp"
     android:orientation="horizontal"
-    android:weightSum="5">
+    android:weightSum="5"
+    android:focusable="false">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/contact_image"
         android:layout_width="16dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/circle"
         android:contentDescription="@string/profile_picture"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"/>
+        android:focusable="false"/>
 
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="4"
+        android:background="@drawable/rectangle"
         android:orientation="horizontal">
 
         <TableRow>
@@ -27,12 +26,14 @@
             <TextView
                 android:id="@+id/contact_name"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="27dp"
+                android:focusable="false"
+                android:gravity="start"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
                 android:text="@string/name"
-                android:paddingStart="10dp"
                 android:textColor="#000000"
-                android:gravity="center"
-                android:textSize="24sp" />
+                android:textSize="22sp" />
         </TableRow>
 
         <TableRow>
@@ -40,11 +41,13 @@
             <TextView
                 android:id="@+id/contact_email"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:paddingStart="8dp"
+                android:layout_height="33dp"
+                android:focusable="false"
+                android:gravity="start"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
                 android:text="@string/email"
-                android:gravity="center"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </TableRow>
     </TableLayout>
 </LinearLayout>

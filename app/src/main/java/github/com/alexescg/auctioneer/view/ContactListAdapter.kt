@@ -1,6 +1,7 @@
 package github.com.alexescg.auctioneer.view
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +18,11 @@ import github.com.alexescg.auctioneer.model.User
  * @since 5/28/17.
  */
 class ContactListAdapter(val contactList: List<User>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         val user: User = contactList[position]
-        (holder as ContactHolder).bind(user)
+        val contactHolder: ContactHolder = holder as ContactHolder
+        contactHolder.bind(user)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
@@ -48,6 +51,9 @@ class ContactListAdapter(val contactList: List<User>) : RecyclerView.Adapter<Rec
             nameText!!.text = user.name
             emailText!!.text = user.email
             Picasso.with(view.context).load(user.avatar).fit().into(userImage)
+            view.setOnClickListener {
+                View.OnClickListener { Log.d("user", user.toString()) }
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.TextView
 import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.model.User
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity(), ChatsFragment.OnFragmentInteractionLis
     }
 
     override fun onListFragmentInteraction(item: User) {
-
+        Log.d("tocando usuario", item.toString())
     }
 
     override fun onFragmentInteraction(uri: Uri?) {
