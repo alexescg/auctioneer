@@ -1,7 +1,6 @@
 package github.com.alexescg.auctioneer.view
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -16,14 +15,10 @@ import github.com.alexescg.auctioneer.api.ApiResponse
 import github.com.alexescg.auctioneer.api.RestClient
 import github.com.alexescg.auctioneer.api.user.UserService
 import github.com.alexescg.auctioneer.model.User
-import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.fragment_contact_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.widget.Toast
-import android.support.annotation.NonNull
-import kotlin.coroutines.experimental.EmptyCoroutineContext.plus
 
 
 /**
@@ -32,7 +27,7 @@ import kotlin.coroutines.experimental.EmptyCoroutineContext.plus
  */
 class ContactFragment : Fragment() {
     private var mListener: OnListFragmentInteractionListener? = null
-
+    var me: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -56,8 +51,10 @@ class ContactFragment : Fragment() {
             override fun onResponse(call: Call<ApiResponse<List<User>>>?,
                                     response: Response<ApiResponse<List<User>>>?) {
                 if (response!!.isSuccessful) {
-                    val me: String = activity.getSharedPreferences("Preferences", 0).getString("user", "")
 
+                    if (me.isEmpty()) {
+                        me = activity.getSharedPreferences("Preferences", 0).getString("user", "")
+                    }
                     val contacts: List<User> = response.body()!!.data
                             .filter { it.id != me }.sortedBy(User::name)
 

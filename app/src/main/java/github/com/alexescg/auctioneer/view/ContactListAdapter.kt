@@ -1,11 +1,11 @@
 package github.com.alexescg.auctioneer.view
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import github.com.alexescg.auctioneer.R
@@ -51,8 +51,9 @@ class ContactListAdapter(val contactList: List<User>) : RecyclerView.Adapter<Rec
             nameText!!.text = user.name
             emailText!!.text = user.email
             Picasso.with(view.context).load(user.avatar).fit().into(userImage)
-            view.setOnClickListener {
-                View.OnClickListener { Log.d("user", user.toString()) }
+            this.itemView.setOnClickListener {
+                //TODO:launch messages window and open web socket
+                Toast.makeText(view.context, "CLICK $user ", Toast.LENGTH_SHORT).show();
             }
         }
     }

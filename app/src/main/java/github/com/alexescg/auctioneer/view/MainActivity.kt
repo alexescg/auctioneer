@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.model.User
 import github.com.alexescg.auctioneer.view.dummy.DummyContent
@@ -48,11 +49,12 @@ class MainActivity : AppCompatActivity(), ChatsFragment.OnFragmentInteractionLis
     }
 
     override fun onListFragmentInteraction(item: User) {
-        Log.d("tocando usuario", item.toString())
+        Toast.makeText(this, "Success $item", Toast.LENGTH_SHORT).show();
     }
 
     override fun onFragmentInteraction(uri: Uri?) {
-        //lo puedo dejar vacio
+        Toast.makeText(this, "Success $uri", Toast.LENGTH_SHORT).show();
+
     }
 
 }
