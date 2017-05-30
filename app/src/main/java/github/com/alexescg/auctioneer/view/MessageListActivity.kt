@@ -9,6 +9,7 @@ import github.com.alexescg.auctioneer.api.ApiResponse
 import github.com.alexescg.auctioneer.api.RestClient
 import github.com.alexescg.auctioneer.api.messages.MessageService
 import github.com.alexescg.auctioneer.model.Message
+import github.com.alexescg.auctioneer.model.User
 import kotlinx.android.synthetic.main.activity_message_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,6 +20,7 @@ class MessageListActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_list)
+        Log.d("user", intent.getParcelableExtra<User>("user").toString())
         initViews()
         loadMessages()
     }

@@ -6,8 +6,6 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
 import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.model.User
