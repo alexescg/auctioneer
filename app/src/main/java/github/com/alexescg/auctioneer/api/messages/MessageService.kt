@@ -1,9 +1,13 @@
 package github.com.alexescg.auctioneer.api.messages
 
 import github.com.alexescg.auctioneer.api.ApiResponse
+import github.com.alexescg.auctioneer.api.OnCreateResponse
 import github.com.alexescg.auctioneer.model.Message
+import github.com.alexescg.auctioneer.model.User
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 /**
  *
@@ -13,5 +17,8 @@ import retrofit2.http.GET
  */
 interface MessageService {
     @GET("/messages")
-    fun getMessages(): Call<ApiResponse<List<Message>>>
+    fun getMessages(): Call<ApiResponse<MutableList<Message>>>
+
+    @POST("/messages")
+    fun sendMessage(@Body message: Message): Call<OnCreateResponse<Message>>
 }

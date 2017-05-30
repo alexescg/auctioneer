@@ -2,6 +2,7 @@ package github.com.alexescg.auctioneer.view
 
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +55,10 @@ class ContactListAdapter(val contactList: List<User>) : RecyclerView.Adapter<Rec
             Picasso.with(view.context).load(user.avatar).fit().into(userImage)
             this.itemView.setOnClickListener { view ->
                 val intent: Intent = Intent(view.context, MessageListActivity::class.java)
+                Log.d("user", user.id)
+                Log.d("user", user.toString())
                 intent.putExtra("user", user)
+                intent.putExtra("userId", user.id)
                 view.context.startActivity(intent)
             }
         }

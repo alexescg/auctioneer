@@ -2,7 +2,6 @@ package github.com.alexescg.auctioneer.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import github.com.alexescg.auctioneer.api.auth.JwtAuthenticator
 import okhttp3.Authenticator
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -18,7 +17,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
  */
 class RestClient {
     companion object {
-        private val baseUrl: String = "http://192.168.100.38:3030"
+        private val baseUrl: String = "http://10.0.0.12:3030"
         private var retrofit: Retrofit
         fun <T> createService(serviceClass: Class<T>): T {
             return retrofit.create(serviceClass);

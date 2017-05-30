@@ -13,6 +13,6 @@ import java.util.*
 @JsonIgnoreProperties(ignoreUnknown = true)
 abstract class Model {
     @JsonProperty("_id") var id: String? = null
-    @JsonProperty("createdAt") var createdAt: Date? = null
-    @JsonProperty("updatedAt") var updatedAt: Date? = null
+    @JsonProperty("createdAt") val createdAt: Date? = Date()
+    @JsonProperty("updatedAt") val updatedAt: Date? = Date()
 }

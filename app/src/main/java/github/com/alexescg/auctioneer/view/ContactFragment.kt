@@ -27,7 +27,7 @@ import retrofit2.Response
  */
 class ContactFragment : Fragment() {
     private var mListener: OnListFragmentInteractionListener? = null
-    var me: String = ""
+    var me: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -52,15 +52,17 @@ class ContactFragment : Fragment() {
                                     response: Response<ApiResponse<List<User>>>?) {
                 if (response!!.isSuccessful) {
 
-                    if (me.isEmpty()) {
+                    if (me!!.isEmpty()) {
                         me = activity.getSharedPreferences("Preferences", 0).getString("user", "")
                     }
                     val contacts: List<User> = response.body()!!.data
-                            .filter { it.id != me }.sortedBy(User::name)
+//                            .filter { it.id != me }
+                            .sortedBy(User::name)
 
                     list.adapter = createReactiveContactAdapter(contacts)
                     list.setItemViewCacheSize(10)
                     list.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
+                    list.adapter.notifyDataSetChanged()
                 }
             }
 

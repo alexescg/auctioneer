@@ -18,7 +18,7 @@ import github.com.alexescg.auctioneer.util.DateUtil
  * @author alex
  * @since 5/27/17.
  */
-class MessageListAdapter(val messageList: List<Message>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageListAdapter(val messageList: MutableList<Message>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private val VIEW_TYPE_MESSAGE_SENT: Int = 1
@@ -33,7 +33,7 @@ class MessageListAdapter(val messageList: List<Message>, val context: Context) :
 
     override fun getItemViewType(position: Int): Int {
         val message: Message = messageList[position]
-        if (message.user.id.equals(userId)) {
+        if (message.user!!.id == userId) {
             return VIEW_TYPE_MESSAGE_SENT
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED
