@@ -19,7 +19,6 @@ import retrofit2.Response
 class MessageListActivity : AppCompatActivity() {
 
     var currentUser: User? = null
-    var currentUserId: String? = null
     val messageService: MessageService = RestClient.createService(MessageService::class.java)
     var messagesList: MutableList<Message>? = ArrayList()
 
@@ -40,16 +39,15 @@ class MessageListActivity : AppCompatActivity() {
 
         button_chatbox_send.setOnClickListener {
             val message: Message = Message(edittext_chatbox.text.toString(), to = currentUser!!)
-            Log.d("message", message.toString())
-            messageService.sendMessage(message).enqueue(object : Callback<OnCreateResponse<Message>> {
-                override fun onFailure(call: Call<OnCreateResponse<Message>>?, t: Throwable?) {
+            messageService.sendMessage(message).enqueue(object : Callback<Message> {
+                override fun onFailure(call: Call<Message>?, t: Throwable?) {
                     Log.d("message create", t.toString())
                 }
 
-                override fun onResponse(call: Call<OnCreateResponse<Message>>?, response: Response<OnCreateResponse<Message>>?) {
+                override fun onResponse(call: Call<Message>?, response: Response<Message>?) {
                     if (response!!.isSuccessful) {
                         Log.d("message created", response.body()!!.toString())
-                        messagesList!!.add(response.body()!!.model)
+                        messagesList!!.add(response.body()!!)
                         recyclerview_message_list.adapter.notifyDataSetChanged()
                     }
                 }

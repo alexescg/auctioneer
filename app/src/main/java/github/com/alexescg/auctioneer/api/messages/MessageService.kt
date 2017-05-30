@@ -20,5 +20,5 @@ interface MessageService {
     fun getMessages(): Call<ApiResponse<MutableList<Message>>>
 
     @POST("/messages")
-    fun sendMessage(@Body message: Message): Call<OnCreateResponse<Message>>
+    fun sendMessage(@Body message: Message): Call<Message>
 }
