@@ -50,7 +50,7 @@ class MessageListActivity : AppCompatActivity() {
                         Log.d("message created", response.body()!!.toString())
                         messagesList.add(response.body()!!)
                         recyclerview_message_list.adapter.notifyDataSetChanged()
-                        button_chatbox_send.text = ""
+                        edittext_chatbox.setText("")
 
                     }
                 }

@@ -17,7 +17,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
  */
 class RestClient {
     companion object {
-        private val baseUrl: String = "http://172.20.10.2:3030"
+        private val baseUrl: String = "https://stormy-castle-10946.herokuapp.com/"
         private var retrofit: Retrofit
         fun <T> createService(serviceClass: Class<T>): T {
             return retrofit.create(serviceClass);
