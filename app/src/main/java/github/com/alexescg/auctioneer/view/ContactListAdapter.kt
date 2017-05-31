@@ -57,7 +57,7 @@ class ContactListAdapter(val contactList: List<User>) : RecyclerView.Adapter<Rec
                 val intent: Intent = Intent(view.context, MessageListActivity::class.java)
                 Log.d("user", user.id)
                 Log.d("user", user.toString())
-                intent.putExtra("user", user)
+                intent.putExtra("to", user)
                 intent.putExtra("userId", user.id)
                 view.context.startActivity(intent)
             }
