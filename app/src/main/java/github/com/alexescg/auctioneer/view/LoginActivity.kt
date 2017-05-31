@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     private var mLoginFormView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        checkIfLoggedIn()
+        checkIfLoggedIn()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         // Set up the login form.

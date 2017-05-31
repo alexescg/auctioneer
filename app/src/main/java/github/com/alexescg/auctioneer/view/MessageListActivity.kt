@@ -1,12 +1,12 @@
 package github.com.alexescg.auctioneer.view
 
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import github.com.alexescg.auctioneer.R
 import github.com.alexescg.auctioneer.api.ApiResponse
-import github.com.alexescg.auctioneer.api.OnCreateResponse
 import github.com.alexescg.auctioneer.api.RestClient
 import github.com.alexescg.auctioneer.api.messages.MessageService
 import github.com.alexescg.auctioneer.model.Message
@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_message_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MessageListActivity : AppCompatActivity() {
 
@@ -59,21 +60,27 @@ class MessageListActivity : AppCompatActivity() {
     }
 
     private fun loadMessages() {
-        val messagesCall: Call<ApiResponse<MutableList<Message>>> = messageService.getMessages()
-        messagesCall.enqueue(object : Callback<ApiResponse<MutableList<Message>>> {
+        val preferences: SharedPreferences = applicationContext.getSharedPreferences("Preferences", 0)
+        Log.d("el mensaje es de: ", preferences.getString("user", ""))
+        Log.d("el mensaje es para: ", recipient!!.id!!)
+        val messagesCall: Call <MutableList <Message>> = messageService.getMessages(
+                preferences.getString("user", ""),
+                recipient!!.id!!
+        )
+        messagesCall.enqueue(object : Callback<MutableList<Message>> {
 
-            override fun onResponse(call: Call<ApiResponse<MutableList<Message>>>?,
-                                    response: Response<ApiResponse<MutableList<Message>>>?) {
+            override fun onResponse(call: Call<MutableList<Message>>?,
+                                    response: Response<MutableList<Message>>?) {
                 if (response!!.isSuccessful) {
-                    for (message: Message in response.body()!!.data) {
-                        Log.d("Mensaje: ", message.toString())
-                    }
-                    messagesList.addAll(response.body()!!.data)
+//                    for (message: Message in response.body()!!.data) {
+//                        Log.d("Mensaje: ", message.toString())
+//                    }
+                    messagesList.addAll(response.body()!!)
                     recyclerview_message_list.adapter.notifyDataSetChanged()
                 }
             }
 
-            override fun onFailure(call: Call<ApiResponse<MutableList<Message>>>?, t: Throwable?) {
+            override fun onFailure(call: Call<MutableList<Message>>?, t: Throwable?) {
                 Log.d("mensajes", t!!.message)
             }
         })
